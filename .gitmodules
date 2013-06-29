@@ -13,3 +13,6 @@
 [submodule "libnss-p2k12"]
 	path = libnss-p2k12
 	url = git@github.com:bitraf/libnss-p2k12.git
+[submodule "botraf"]
+	path = botraf
+	url = git@github.com:bitraf/botraf.git
