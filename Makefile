@@ -1,4 +1,4 @@
-TARGETS:=$(shell git submodule --quiet  foreach  echo packages/'$$name-$$sha1'.zip)
+TARGETS:=$(shell git submodule --quiet foreach echo packages/'$$name-$$sha1'.zip)
 
 all: $(TARGETS)
 
