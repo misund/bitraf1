@@ -1,0 +1,15 @@
+[submodule "p2k12"]
+	path = p2k12
+	url = git@github.com:bitraf/p2k12.git
+[submodule "dlock13"]
+	path = dlock13
+	url = git@github.com:bitraf/dlock13.git
+[submodule "bitmart"]
+	path = bitmart
+	url = git@github.com:bitraf/bitmart.git
+[submodule "nadlink"]
+	path = nadlink
+	url = git@github.com:bitraf/nadlink.git
+[submodule "libnss-p2k12"]
+	path = libnss-p2k12
+	url = git@github.com:bitraf/libnss-p2k12.git
