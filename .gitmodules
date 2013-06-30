@@ -16,3 +16,6 @@
 [submodule "botraf"]
 	path = botraf
 	url = git@github.com:bitraf/botraf.git
+[submodule "corosync"]
+	path = corosync
+	url = git@github.com:corosync/corosync.git
