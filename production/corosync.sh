@@ -1,11 +1,10 @@
 #!/bin/bash
 
 export COROSYNC_MAIN_CONFIG_FILE=$(mktemp)
-export COROSYNC_TOTEM_AUTHKEY_FILE=$(mktemp)
 
 function cleanup()
 {
-  rm -f "$COROSYNC_MAIN_CONFIG_FILE" "$COROSYNC_TOTEM_AUTHKEY_FILE"
+  rm -f "$COROSYNC_MAIN_CONFIG_FILE"
 }
 
 trap cleanup EXIT
@@ -17,6 +16,7 @@ SERVER_ADDRESSES=" \
   "
 
 LOCAL_ADDRESSES=$(ip -o -6 addr show | awk '$3 = "inet6" { print $4 }' | cut -d/ -f1)
+NODE_ID=100
 
 for a in $SERVER_ADDRESSES
 do
@@ -28,6 +28,7 @@ do
       break
     fi
   done
+  NODE_ID=$((NODE_ID+1))
 done
 
 if [ -z "$LOCAL_ADDRESS" ]
@@ -41,6 +42,7 @@ totem {
         version: 2
         transport: udpu
         secauth: on
+        nodeid: $NODE_ID
         interface {
                 ringnumber: 0
                 bindnetaddr: $LOCAL_ADDRESS
@@ -75,9 +77,9 @@ logging {
 EOF
 ) > "$COROSYNC_MAIN_CONFIG_FILE"
 
-# TODO(mortehu): Replace with key from keyring
-echo '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef' > "$COROSYNC_TOTEM_AUTHKEY_FILE"
-
+export COROSYNC_TOTEM_AUTHKEY_FILE=/etc/bitraf1/keyring/corosync
 export LD_LIBRARY_PATH="$PACKAGE_ROOT"/lib:"$PACKAGE_ROOT"/libexec
 
-exec "$PACKAGE_ROOT"/sbin/corosync
+cat "$COROSYNC_MAIN_CONFIG_FILE"
+
+"$PACKAGE_ROOT"/sbin/corosync -f
