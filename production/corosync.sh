@@ -14,6 +14,7 @@ SERVER_ADDRESSES=" \
   2a02:270:2015:b00b:3e07:54ff:fe0c:3fd6 \
   2a02:270:2015:b00b:babe:cafe:face:beef \
   "
+QUORUM=2
 
 LOCAL_ADDRESSES=$(ip -o -6 addr show | awk '$3 = "inet6" { print $4 }' | cut -d/ -f1)
 NODE_ID=100
@@ -60,6 +61,10 @@ done
 
 cat <<EOF
         }
+}
+quorum {
+        provider: corosync_votequorum
+        expected_votes: $QUORUM
 }
 logging {
         fileline: off
