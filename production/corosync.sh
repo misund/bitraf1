@@ -25,7 +25,7 @@ do
     if [ "$a" = "$b" ]
     then
       LOCAL_ADDRESS=$a
-      break
+      break 2
     fi
   done
   NODE_ID=$((NODE_ID+1))
