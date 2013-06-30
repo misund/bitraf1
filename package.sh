@@ -31,7 +31,10 @@ function cleanup()
 
 trap cleanup EXIT
 
-if [ -f configure.ac -o -f configure.in ]
+if [ -x autogen.sh ]
+then
+  ./autogen.sh
+elif [ -f configure.ac -o -f configure.in ]
 then
   autoreconf -f -i
 fi
@@ -50,13 +53,13 @@ cd "$BUILD_PATH"
 
 if [ -f "$SRC_PATH"/configure ]
 then
-  "$SRC_PATH"/configure --prefix=/bitraf1 --datarootdir=/bitraf1/share
+  "$SRC_PATH"/configure --prefix=/bitraf1/"$PACKAGE_NAME" --datarootdir=/bitraf1/"$PACKAGE_NAME"/share
   make
   fakeroot -s "$FAKEROOT_STATE" -i "$FAKEROOT_STATE" make install DESTDIR="$INSTALL_PATH"
 elif [ -f "$SRC_PATH"/Makefile ]
 then
-  mkdir "$INSTALL_PATH"/bitraf1
-  fakeroot -s "$FAKEROOT_STATE" -i "$FAKEROOT_STATE" make -C "$SRC_PATH" install DESTDIR="$INSTALL_PATH"/bitraf1
+  mkdir -p "$INSTALL_PATH"/bitraf1/"$PACKAGE_NAME"
+  fakeroot -s "$FAKEROOT_STATE" -i "$FAKEROOT_STATE" make -C "$SRC_PATH" install DESTDIR="$INSTALL_PATH"/bitraf1/"$PACKAGE_NAME"
 else
   echo "Warning: No configure script or Makefile found in submodule $SUBMODULE; don't know how to build" 1>&2
   exit 0
@@ -64,7 +67,7 @@ fi
 
 cd "$INSTALL_PATH"
 
-fakeroot -i "$FAKEROOT_STATE" zip "$PACKAGE_PATH"/tmp.zip -r bitraf1
+fakeroot -i "$FAKEROOT_STATE" zip "$PACKAGE_PATH"/tmp.zip -r bitraf1/"$PACKAGE_NAME"
 
 mkdir -p "$1"
 
