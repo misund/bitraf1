@@ -41,6 +41,7 @@ fi
 (cat <<EOF
 totem {
         version: 2
+        ip_version: ipv6
         transport: udpu
         secauth: on
         nodeid: $NODE_ID
@@ -81,6 +82,8 @@ logging {
 }
 EOF
 ) > "$COROSYNC_MAIN_CONFIG_FILE"
+
+mkdir -p "$PACKAGE_ROOT"/var/run
 
 export COROSYNC_TOTEM_AUTHKEY_FILE=/etc/bitraf1/keyring/corosync
 export LD_LIBRARY_PATH="$PACKAGE_ROOT"/lib:"$PACKAGE_ROOT"/libexec
